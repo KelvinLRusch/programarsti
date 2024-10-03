@@ -11,7 +11,7 @@
 $(document).ready(function(){
     //adiciona o pattern ao campo do CEP
     $("input[name=cep]").mask("00000-000");
-
+    $("input[name=num]").mask("#")
     $("form").on("submit", function(event){
         //interrompe o evento de envio
         event.stopPropagation();
@@ -32,12 +32,59 @@ $(document).ready(function(){
         
         //validação de quantidade de caracteres
         if (cep.length == 8) {
-            $("input[name=cep]").removeClass("is-invalid");
-            alert(cep);
+            //alert(cep);
+            $.ajax("https://viacep.com.br/ws/" + cep + "/json").done(function(data){
+                let resposta = JSON.parse(data);
+                if(!resposta.erro){
+                    $("input[name=cep]").removeClass("is-invalid");
+                    $("input[name=rua]").val(resposta.logradouro);
+                    $("select[name=cidade]").val(resposta.localidade);
+                    $("input[name=complemento]").val(resposta.complemento);
+                    $("input[name=bairro]").val(resposta.bairro);
+                    $("select[name=estado]").val(resposta.uf);
+                }
+                
+            });
         }else if (cep.length == 0){
             $("input[name=cep]").removeClass("is-invalid");
         }else{
             $("input[name=cep]").addClass("is-invalid");
         }
     });
+
+    const urlEstados = "https://servicodados.ibge.gov.br/api/v1/localidades/estados";
+
+    $.getJSON(urlEstados, function(data){
+        data.sort(function(a,b){
+            return a.nome.localeCompare(b.nome);
+        });
+
+        data.forEach(function(estado){
+            $("select[name=estado]").append(`<option value="${estado.sigla}">${estado.nome}</option>`);
+        })
+    })
+
+    $(`#estado`).on(`change`, function(){
+        let estadoId = $(this).val();
+
+        if(estadoId){
+            const urlCidades = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoId}/municipios`;
+            // $('body').append(urlCidades);
+            $.getJSON(urlCidades, function(data){
+                $("#cidade").empty();
+                $("#cidade").append('<option value="">Selecione a cidade</option>');
+
+                data.sort(function(a,b){
+                    return a.nome.localeCompare(b.nome);
+                });
+
+                data.forEach(function(cidade){
+                    $("#cidade").append(`<option value="${cidade.nome}">${cidade.nome}</option>`);
+                });
+            });
+        }else{
+            $("select[name=cidade]").empty();
+            $("select[name=cidade]").append('<option value="">Primeiro selecione a cidade</option>');
+        }
+    })
 });

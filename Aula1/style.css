@@ -2,8 +2,20 @@ body{
     padding: 15px;
 }
 
-div{
-    padding-top:6px;
+.row{
+    margin-bottom: 15px;
 }
+
+#BarraLateral{
+    background-color: rgb(170, 168, 168);
+    border-top-right-radius: 4%;
+    border-end-end-radius: 4%;
+    text-align: center;
+    padding: 10px;
+}
+
+
+
+
 
 
