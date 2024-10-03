@@ -9,6 +9,10 @@
 //$ esta chamando o JQUERY
 
 $(document).ready(function(){
+    // Define a variável "resposta" como variável global
+    // para que ela seja acessível à partir de qualquer função
+    let resposta = '';
+    
     //adiciona o pattern ao campo do CEP
     $("input[name=cep]").mask("00000-000");
     $("input[name=num]").mask("#")
@@ -34,11 +38,10 @@ $(document).ready(function(){
         if (cep.length == 8) {
             //alert(cep);
             $.ajax("https://viacep.com.br/ws/" + cep + "/json").done(function(data){
-                let resposta = JSON.parse(data);
+                resposta = JSON.parse(data);
                 if(!resposta.erro){
                     $("input[name=cep]").removeClass("is-invalid");
                     $("input[name=rua]").val(resposta.logradouro);
-                    $("select[name=cidade]").val(resposta.localidade);
                     $("input[name=complemento]").val(resposta.complemento);
                     $("input[name=bairro]").val(resposta.bairro);
                     $("select[name=estado]").val(resposta.uf);
@@ -81,6 +84,8 @@ $(document).ready(function(){
                 data.forEach(function(cidade){
                     $("#cidade").append(`<option value="${cidade.nome}">${cidade.nome}</option>`);
                 });
+
+                $("select[name=cidade]").val(resposta.localidade);
             });
         }else{
             $("select[name=cidade]").empty();
