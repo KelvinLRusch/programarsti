@@ -45,6 +45,7 @@ $(document).ready(function(){
                     $("input[name=complemento]").val(resposta.complemento);
                     $("input[name=bairro]").val(resposta.bairro);
                     $("select[name=estado]").val(resposta.uf);
+                    $("select[name=estado]").trigger("change");
                 }
                 
             });
@@ -72,7 +73,6 @@ $(document).ready(function(){
 
         if(estadoId){
             const urlCidades = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoId}/municipios`;
-            // $('body').append(urlCidades);
             $.getJSON(urlCidades, function(data){
                 $("#cidade").empty();
                 $("#cidade").append('<option value="">Selecione a cidade</option>');
