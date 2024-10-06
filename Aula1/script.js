@@ -75,10 +75,13 @@ $(document).ready(function(){
                 respota = {"erro": "true"}
             });
             
-        }else if (cep.length == 0){
-            $("input[name=cep]").removeClass("is-invalid");
         }else{
-            $("input[name=cep]").addClass("is-invalid");
+            if(cep.length > 0){
+                $("input[name=cep]").addClass("is-invalid");
+            }else{
+                $("input[name=cep]").removeClass("is-invalid");
+            }
+            
             $("select[name=estado]").val("");
             $("select[name=cidade]").val("");
             $("input[name=rua]").val("");
