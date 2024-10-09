@@ -1,0 +1,18 @@
+{
+    "name": "John",
+    "age": "30",
+    "cars": ["Ford","BMW","FIAT"],
+    "friends": [{
+        "firstName": "Mike",
+        "lastName": "Jones"
+    },{
+        "firstName": "John",
+        "lastName": "Smith"
+    },{
+        "firstName": "Laurence",
+        "lastName": "Svekis"
+    },{
+        "firstName": "Alice",
+        "lastName": "James"
+    }]
+}
